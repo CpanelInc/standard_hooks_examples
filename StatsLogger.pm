@@ -5,29 +5,34 @@ package Example::StatsLogger;
 
 # There are two major parts to a standard hook:
 #  * The function used to tell the hooks sytstem how it works (the describe method)
-#  * The Hooked code (In this case, the copy_logfiles method)
+#  * The Hooked code (in this case, the copy_logfiles method)
 
 # The Describe Method
-# When this hook is installed it is run with '/usr/local/cpanel/bin/manage_hooks add module Example::StatsLogger`.
+# This hook can be activated by executing '/usr/local/cpanel/bin/manage_hooks add module Example::StatsLogger`.
 # At this point the describe method within this hook is invoked, the data structure that is returned is parsed 
 # and placed into the hooks database.
 
 # The Hooked Code
-# This is the code where a hook's logic is kept.  It is passed 2 parameters:
+# This is the code where a hook's logic is kept.  The hook system is made aware of a hook by the information returned 
+# from describe()  It is passed 2 parameters:
 #   * The Context - Describes where the hook is being called from
 #   * Args - The data passed from the code calling it
-# These two pieces of data are documented in full in the "Hook insertion point" documentation, available at url/that/does not/exist/yet
-# 
-# In this example, we are taking the information passed in the data that is passed to the hook in the $data string
-# and acting upon it so that we can copy files to the user's homedirectory.
+# These two pieces of data are documented in full in the "Hook insertion point" documentation, available at 
+# url/that/does not/exist/yet
 
-# In some hook insertion points, it's important to note which user is executing the hook.  In this case, the hook is run by the user itself
-# rather than executed by root.  In cases where you are running code as root, it is important to not perform file operations on files under
-# The user's control, the Cpanel::AccessIds module offers a few methods that address this concern.
+# In this example, the hook system will proxy the attributes related to domlog processing to copy_logfiles() so the 
+# respective log files can be copied to the user's homedirectory when domain log statistics run.  Because the
+# describe() hash element 'stage' is defined as 'post' the hook action will occur after the various statistic engines 
+# parse the log files but prior to the end the larger cPanel operation.
+
+# In some hook insertion points, it's important to note which user is executing the hook.  In this case, the hook is 
+# run by the user itself rather than executed by root.  In cases where you are running code as root, it is important
+# to not perform file operations on files under the user's control, the Cpanel::AccessIds module offers a few methods
+# that address this concern.
 
 # This is the describe subroutine.
-# This subroutine is used by /usr/local/cpanel/bin/manage_hooks
-# so that the hooks database can be properly populated.
+# This subroutine is used by /usr/local/cpanel/bin/manage_hooks to populated the hooks database. Every standard hook 
+# MUST have this subroutine.
 sub describe {
 	my $hooks = [
 		{
