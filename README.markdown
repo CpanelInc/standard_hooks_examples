@@ -7,10 +7,14 @@ It is suggested that you review the Standardized Hooks documentation on http://s
 WARNING: These hooks will modify the behavior of your cPanel & WHM installation, these should only be installed after the affects of using them is fully understood.  *This specifically applies to the "RollbackHook" module which will disable the ability to create accounts.*
 
 Install the example hooks on the cPanel system:
+
 > mkdir -p /var/cpanel/perl5/lib/Example
+
+
 > cp /path/to/checked/out/modules/*pm /var/cpanel/perl5/lib/Example
 
 Register the hooks with the cPanel system:
+
 > /usr/local/cpanel/bin/manage_hooks add module Example::$modulename
 
 # Information on the Included Libraries
