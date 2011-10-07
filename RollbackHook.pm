@@ -1,5 +1,6 @@
 package Example::RollbackHook;
-
+use strict;
+use warnings;
 use Cpanel::DataStore ();
 
 # This module implements an example of a RollbackHook.
@@ -125,8 +126,9 @@ sub describe {
             'function'  => 'Accounts::Create',
             'stage'     => 'pre',
             'hook'      => 'Example::RollbackHook::deny_event',
+
             #ensure that this is run after the hook that needs to be rolled back.
-            'weight'    => 3,                                                       
+            'weight' => 3,
         },
     ];
     return $hook;
